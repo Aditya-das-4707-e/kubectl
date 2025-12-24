@@ -61,5 +61,5 @@ kubectl get pods -n nginx -o wide
 <p>To update image in deployment</p>
 
 ```
-kubectl set image deployment/nginx-deployment -n nginx <image_name>=<version>
+kubectl set image deployment/nginx-deployment -n nginx <container_name>=<image_name>:<version>
 ```
