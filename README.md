@@ -48,3 +48,8 @@ kubectl get deployment -n <namespace>
 ```
 kubectl get pods -n <namespace>
 ```
+<p>To scale this deployment</p>
+
+```
+kubectl scale deployment.app/nginx-deployment -n nginx --replicas=5
+```
