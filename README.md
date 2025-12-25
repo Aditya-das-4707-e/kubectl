@@ -27,6 +27,11 @@ kubectl exec -it pod/<pod-name> -n <namespace> -- bash
 ```
 kubectl describe pod/<pod-name> -n <namespace>
 ```
+# To see each pods
+
+```
+kubectl get pods -n <namespace>
+```
 # Deployment 
 <p>In deployment you first delete pod.yml file</p>
 
@@ -43,11 +48,6 @@ kubectl apply -f deployment.yml
 ```
 kubectl get deployment -n <namespace>
 ```
-<p>To see each pods</p>
-
-```
-kubectl get pods -n <namespace>
-```
 <p>To scale this deployment</p>
 
 ```
@@ -62,4 +62,15 @@ kubectl get pods -n nginx -o wide
 
 ```
 kubectl set image deployment/nginx-deployment -n nginx <container_name>=<image_name>:<version>
+```
+# ReplicaSets (optional use only / education purpose)
+<p>To apply replicasets</p>
+
+```
+kubectl apply -f replicasets.yml
+```
+<p>To see replicaset pod</p>
+
+```
+kubectl get replicasets -n <namespace>
 ```
