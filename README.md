@@ -126,3 +126,25 @@ kubectl logs pod/<job_name> -n <namespace>
 ```
 kubectl delete -f job.yml
 ```
+# Cron-job
+<p>To apply cron job</p>
+
+```
+kubectl apply -f cron-job.yml
+```
+<p>To see cron job</p>
+
+```
+kubectl get cronjob -n <namespace>
+```
+
+<p>To see pods</p>
+
+```
+kubectl get pods -n <namespace>
+```
+<p>To delete this pods</p>
+
+```
+kubectl delete -f cron-job.yml
+```
