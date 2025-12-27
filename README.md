@@ -148,3 +148,16 @@ kubectl get pods -n <namespace>
 ```
 kubectl delete -f cron-job.yml
 ```
+# (1) Persistent Volume
+<p>To create persistentVolume</p>
+<p>I add my own storage path there. You please enter own storage path there. To enter own path you just go to code file and change storage path</p>
+
+```
+kubectl apply -f persistentVolume.yml
+```
+<p>To see Persistent Volume</p>
+
+```
+kubectl get pv
+```
+# (2) Persistent Volume Claim
