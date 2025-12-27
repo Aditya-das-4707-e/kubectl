@@ -205,10 +205,10 @@ kubectl get all -n <namespace>
 <p> <b>(For local computer)</b> To see this service in browser locally (Your local laptop)</p>
 
 ```
-kubectl port-forward service/<your_service_name>-service -n nginx <enter_your_port(anything)>:80
+kubectl port-forward service/<your_service_name>-service -n <namespace> <enter_your_port(anything)>:80
 ```
 <p> <b>(For cloud computer)</b> To see this service in browser locally (Cloud EC2 instence)</p>
 
 ```
-sudo -E kubectl port-forward service/<your_service_name>-service -n nginx <enter_your_port(anything):80 --address=0.0.0.0
+sudo -E kubectl port-forward service/<your_service_name>-service -n <namespace> <enter_your_port(anything):80 --address=0.0.0.0
 ```
