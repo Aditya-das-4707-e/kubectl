@@ -19,3 +19,12 @@ spec:
         image: nginx:latest
         ports:
           - containerPort: 80
+          # Volume Mounts only use when user use persistent volume and persistent volume claim file
+          # if user run without use persistent volume and persistent volume claim file then please kindly remove or comment out last line no. 24 to 30
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: my-volume
+      volumes:
+        - name: my-volume
+          persistentVolumeClaim:
+            claimName: local-pvc
