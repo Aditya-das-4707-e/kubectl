@@ -191,3 +191,24 @@ kubectl get pv -n <namespace>
 ```
 kubectl delete pvc/local-pvc
 ```
+# Service
+<p>To apply service</p>
+
+```
+kubectl apply -f service.yml
+```
+<p>To see all resorces</p>
+
+```
+kubectl get all -n <namespace>
+```
+<p> <b>(For local computer)</b> To see this service in browser locally (Your local laptop)</p>
+
+```
+kubectl port-forward service/nginx-service -n nginx <enter_your_port(anything)>:80
+```
+<p> <b>(For cloud computer)</b> To see this service in browser locally (Cloud EC2 instence)</p>
+
+```
+sudo -E kubectl port-forward service/nginx-service -n nginx <enter_your_port(anything):80 --address=0.0.0.0
+```
