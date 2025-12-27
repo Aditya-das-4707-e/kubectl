@@ -164,7 +164,12 @@ kubectl apply -f persistentVolume.yml
 <p>To see Persistent Volume</p>
 
 ```
-kubectl get pv
+kubectl get pv -n <namespace>
+```
+<p>To delete this</p>
+
+```
+kubectl delete pv/local-pv
 ```
 <p>Now you see STATUS section is Available</p>
 
@@ -178,6 +183,11 @@ kubectl apply -f persistentVolumeClaim.yml
 <p>To see Persistent Volume</p>
 
 ```
-kubectl get pv
+kubectl get pv -n <namespace>
 ```
 <p>Now you see STATUS section is Bound</p>
+<p>To delete this</p>
+
+```
+kubectl delete pvc/local-pvc
+```
