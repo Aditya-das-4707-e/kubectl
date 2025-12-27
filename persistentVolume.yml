@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: local-pv
+  namespace: nginx # I put my created namespace name "nginx". You just find your namespace name and put it there. 
   labels:
     app: local
 spec:
