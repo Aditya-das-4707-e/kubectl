@@ -13,6 +13,12 @@ kind create cluster --name <choose a name> --config=config.yml
 ```
 kubectl apply -f namespace.yml
 ```
+# To see namespace
+<p>Use this command</p>
+
+```
+kubectl get ns
+```
 # To create pod inside the namespace 
 <p>Go to this section where namespace.yml file present</p>
 
