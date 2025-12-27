@@ -167,6 +167,7 @@ kubectl apply -f persistentVolume.yml
 kubectl get pv
 ```
 <p>Now you see STATUS section is Available</p>
+
 # (2) Persistent Volume Claim
 <p>To claim persistent volume use persistent volume claim</p>
 <p>To use</p>
