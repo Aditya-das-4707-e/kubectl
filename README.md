@@ -74,6 +74,196 @@ kubectl set image deployment/nginx-deployment -n nginx <container_name>=<image_n
 ```
 kubectl delete -f deployment.yml
 ```
+# When you add many service
+## To add others survice in there
+<p>Add all service in same namespace.</p>
+<p>Now run this command where your kind cluster file present</p>
+
+```bash
+kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
+```
+<p>You see output like this</p>
+
+**Example**
+```
+aditya@Aditya:~/devops/kubernetes/kind-cluster$ kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
+namespace/ingress-nginx created
+serviceaccount/ingress-nginx created
+serviceaccount/ingress-nginx-admission created
+role.rbac.authorization.k8s.io/ingress-nginx created
+role.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+configmap/ingress-nginx-controller created
+service/ingress-nginx-controller created
+service/ingress-nginx-controller-admission created
+deployment.apps/ingress-nginx-controller created
+job.batch/ingress-nginx-admission-create created
+job.batch/ingress-nginx-admission-patch created
+ingressclass.networking.k8s.io/nginx created
+validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
+aditya@Aditya:~/devops/kubernetes/kind-cluster$ 
+```
+<p>Now you run this command</p>
+
+```
+kubectl get ns
+```
+<p>You see a namespace build in there. Name is <b>ingress-nginx</b></p>
+
+**Example output**
+```
+aditya@Aditya:~/devops/kubernetes/kind-cluster$ kubectl get ns
+NAME                 STATUS   AGE
+default              Active   5d
+ingress-nginx        Active   4m46s
+kube-node-lease      Active   5d
+kube-public          Active   5d
+kube-system          Active   5d
+local-path-storage   Active   5d
+nginx                Active   3d14h
+aditya@Aditya:~/devops/kubernetes/kind-cluster$ 
+```
+<p>Now you run this command to see pods in this new namespace</p>
+
+```bash
+kubectl get pods -n ingress-nginx
+```
+**Example Output**
+```
+aditya@Aditya:~/devops/kubernetes/kind-cluster$ kubectl get pods -n ingress-nginx
+NAME                                        READY   STATUS      RESTARTS   AGE
+ingress-nginx-admission-create-gn86m        0/1     Completed   0          8m23s
+ingress-nginx-admission-patch-fcnmt         0/1     Completed   2          8m23s
+ingress-nginx-controller-66fdf84d85-6jpdl   1/1     Running     0          8m23s
+aditya@Aditya:~/devops/kubernetes/kind-cluster$ 
+```
+<p><b>STATUS Completed</b> mean is those are jobs and its completed</p>
+<p><b>STATUS Running</b> mean is those are pods and its running</p>
+
+<p>Now you run this to see services in this new namespace</p>
+
+```bash
+kubectl get service -n ingress-nginx
+```
+**Example Output**
+```
+aditya@Aditya:~/devops/kubernetes/kind-cluster$ kubectl get service -n ingress-nginx
+NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.96.179.123   <pending>     80:32686/TCP,443:30343/TCP   14m
+ingress-nginx-controller-admission   ClusterIP      10.96.220.81    <none>        443/TCP                      14m
+aditya@Aditya:~/devops/kubernetes/kind-cluster$
+```
+<p>You see <b>TYPE LoadBalancer</b>. This service you expose letter</p>
+<p>Now go your code folder and make a file name ingress.yml</p>
+<p>And put this code in this file</p>
+
+```yml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: <choose_your_name>
+  # name: nginx-notes-ingress
+  namespace: <enter_common_namespace_for_both_service>
+  # namespace: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / #optional. when you use both invisible port app like port 80. 
+spec:
+  rules: 
+  - http: 
+      paths: 
+      - pathType: Prefix 
+        path: <enter_your_path>
+        # path: /nginx
+        backend: 
+          service:
+            name: nginx-service
+            port:
+              number: 80
+      - pathType: Prefix
+        path: <enter_your_path>
+        # path: /
+        backend: 
+          service:
+            name: notes-app-service
+            port:
+              number: 8000
+```
+<p>Now apply</p>
+
+```bash
+kubectl apply -f ingress.yml
+```
+<p>Now see you ingress</p>
+
+```bash
+kubectl get ingress -n nginx
+```
+**Example output**
+```
+aditya@Aditya:~/devops/kubernetes/kind-cluster/nginx$ kubectl get ingress -n nginx
+NAME                  CLASS    HOSTS   ADDRESS     PORTS   AGE
+nginx-notes-ingress   <none>   *       localhost   80      71s
+aditya@Aditya:~/devops/kubernetes/kind-cluster/nginx$ 
+```
+<p>Now see everything</p>
+
+```bash
+kubectl get all -n nginx
+```
+**Example Output**
+```
+aditya@Aditya:~/devops/kubernetes/kind-cluster/nginx$ kubectl get all -n nginx
+NAME                                      READY   STATUS    RESTARTS      AGE
+pod/nginx-deployment-6f59995b97-7k8lq     1/1     Running   2 (81m ago)   15h
+pod/nginx-deployment-6f59995b97-thqxp     1/1     Running   2 (81m ago)   15h
+pod/notes-app-deployment-978b5946-t2knn   1/1     Running   0             48m
+
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/nginx-service       ClusterIP   10.96.68.204    <none>        80/TCP     13h
+service/notes-app-service   ClusterIP   10.96.184.149   <none>        8000/TCP   48m
+
+NAME                                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deployment       2/2     2            2           15h
+deployment.apps/notes-app-deployment   1/1     1            1           48m
+
+NAME                                            DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deployment-6f59995b97     2         2         2       15h
+replicaset.apps/notes-app-deployment-978b5946   1         1         1       48m
+aditya@Aditya:~/devops/kubernetes/kind-cluster/nginx$ 
+```
+<p>Now use this command to expose this service</p>
+
+```bash
+kubectl get service -n ingress-nginx
+```
+**Example Output**
+```
+aditya@Aditya:~/devops/kubernetes/kind-cluster/nginx$ kubectl get service -n ingress-nginx
+NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.96.179.123   <pending>     80:32686/TCP,443:30343/TCP   44m
+ingress-nginx-controller-admission   ClusterIP      10.96.220.81    <none>        443/TCP                      44m
+aditya@Aditya:~/devops/kubernetes/kind-cluster/nginx$ 
+```
+<p>You see in <b>NAME ingress-nginx-controller</b> we need to expose this service</p>
+<p>To expose this service</p>
+
+```bash
+sudo -E kubectl port-forward service/ingress-nginx-controller -n ingress-nginx 80:80
+```
+<p>If you see port already in use error then visit my another github repo</p>
+
+```github
+[Port clean](https://github.com/Aditya-das-4707-e/Ghost-Port-Cleanup-Tool)
+```
+<p><b>Now you see your app is running</b></p>
+
+<h2><b>Go to next step</b></h2>
+
 # ReplicaSets (optional use only / education purpose)
 <p>To apply replicasets</p>
 
