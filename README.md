@@ -47,6 +47,7 @@ adi-cloud-cluster-worker2          Ready    <none>          10m   v1.xx
 adi-cloud-cluster-worker3          Ready    <none>          10m   v1.xx
 ```
 **Warning**
+
 6. To delte your cluster
 ```bash
 kind delete cluster --name <cluster_name>
