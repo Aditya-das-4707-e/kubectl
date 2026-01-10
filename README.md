@@ -28,6 +28,25 @@ kind create cluster --name <choose-a-name> --config=config.yml
 kind create cluster --name my-first-cluster --config=config.yml
 ```
 
+4. To see your cluster
+
+```bash
+kind get clusters
+```
+5. To see your nodes
+
+```bash
+kubectl get nodes
+```
+**Example Output**
+```
+NAME                               STATUS   ROLES           AGE   VERSION
+adi-cloud-cluster-control-plane    Ready    control-plane   10m   v1.xx
+adi-cloud-cluster-worker           Ready    <none>          10m   v1.xx
+adi-cloud-cluster-worker2          Ready    <none>          10m   v1.xx
+adi-cloud-cluster-worker3          Ready    <none>          10m   v1.xx
+```
+
 ---
 
 ## To Create Namespace
